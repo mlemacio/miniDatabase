@@ -4,6 +4,6 @@ cc_binary(
     name = "main",
     srcs = ["main.cpp"],
     deps = [
-      "//table:table",
+      "//include:table",
     ],
 )

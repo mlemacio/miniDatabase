@@ -1,5 +1,5 @@
-#ifndef TABLE_TABLE_HELPERS_H
-#define TABLE_TABLE_HELPERS_H
+#ifndef INCLUDE_TABLE_HELPERS_H
+#define INCLUDE_TABLE_HELPERS_H
 
 #include <iostream>
 #include <variant>
@@ -35,7 +35,7 @@ namespace table
     using colValue_t = std::variant<int, std::string, bool, double>;
 
     // For simplicity, just assume a row is a vector of column values. This can get a lot more complex
-    using row_t = std::vector<const colValue_t>;
+    using row_t = std::vector<colValue_t>;
     using rows_t = std::vector<row_t>;
 
     /**
@@ -56,4 +56,4 @@ namespace table
     }
 }
 
-#endif // TABLE_TABLE_HELPERS_H
+#endif // INCLUDE_TABLE_HELPERS_H

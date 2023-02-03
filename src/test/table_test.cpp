@@ -1,28 +1,29 @@
 #include <gtest/gtest.h>
+#include <memory>
 
-#include "table/table.h"
+#include "include/table.h"
 
 namespace test
 {
     using namespace table;
 
-    table_t setUpTable(std::vector<colType_e> &&tableDef, rows_t &&rowsBefore)
+    auto setUpTable(auto &&tableDef, auto &&rowsBefore) -> std::unique_ptr<table_t>
     {
-        table_t t(std::move(tableDef));
+        auto t = std::make_unique<table_t>(std::move(tableDef));
         for (auto &row : rowsBefore)
         {
-            t.appendRow(std::move(row));
+            t->appendRow(std::move(row));
         }
 
         return t;
     }
 
-    void runTest(table_t &t,
-                 rows_t &&rowsAfter,
-                 std::vector<sortPolicy_t> &&sorts)
+    void runTest(const auto &tPtr,
+                 const auto &rowsAfter,
+                 auto &&sorts)
     {
-        t.sort(std::move(sorts));
-        auto rowsAfterSort = t.getRows();
+        tPtr->sort(std::move(sorts));
+        auto rowsAfterSort = tPtr->getRows();
 
         EXPECT_EQ(rowsAfterSort.size(), rowsAfter.size());
 
@@ -52,7 +53,7 @@ namespace test
             {"bbb", 0, false},
         };
 
-        table_t t = setUpTable(std::move(tableDef), std::move(rowsBefore));
+        auto tPtr = setUpTable(std::move(tableDef), std::move(rowsBefore));
 
         rows_t rowsAfter = {
             {"aa", 3, true},
@@ -62,9 +63,9 @@ namespace test
             {"xx", 2, false},
         };
         std::vector<sortPolicy_t> sortPolicies = {
-            {0, true},
+            {colIndex_t(0), sortOrder_e::ASC},
         };
-        runTest(t, std::move(rowsAfter), std::move(sortPolicies));
+        runTest(tPtr, std::move(rowsAfter), std::move(sortPolicies));
     }
 
     TEST(tableTest, basicSort_2)
@@ -79,7 +80,7 @@ namespace test
             {"bbb", 0, false},
         };
 
-        table_t t = setUpTable(std::move(tableDef), std::move(rowsBefore));
+        auto tPtr = setUpTable(std::move(tableDef), std::move(rowsBefore));
 
         rows_t rowsAfter = {
             {"bbb", 0, false},
@@ -89,17 +90,16 @@ namespace test
             {"aa", 4, true},
         };
         std::vector<sortPolicy_t> sortPolicies = {
-            {2, true},
-            {1, true},
-        };
+            {colIndex_t(2), sortOrder_e::ASC},
+            {colIndex_t(1), sortOrder_e::ASC}};
 
-        runTest(t, std::move(rowsAfter), std::move(sortPolicies));
+        runTest(tPtr, std::move(rowsAfter), std::move(sortPolicies));
     }
 
     TEST(tableTest, multipleSorts)
     {
         // Define our table
-        auto tableDef = {colType_e::STRING, colType_e::INTEGER, colType_e::BOOLEAN};
+        std::vector<colType_e> tableDef = {colType_e::STRING, colType_e::INTEGER, colType_e::BOOLEAN};
         rows_t rowsBefore = {
             {"aa", 3, true},
             {"bbb", 1, true},
@@ -108,44 +108,47 @@ namespace test
             {"bbb", 0, false},
         };
 
-        table_t t = setUpTable(std::move(tableDef), std::move(rowsBefore));
+        auto tPtr = setUpTable(std::move(tableDef), std::move(rowsBefore));
 
-        rows_t rowsAfter = {
+        rows_t rowsAfter = rows_t{
             {"aa", 3, true},
             {"aa", 4, true},
             {"bbb", 1, true},
             {"bbb", 0, false},
             {"xx", 2, false},
         };
+
         std::vector<sortPolicy_t> sortPolicies = {
-            {0, true},
+            sortPolicy_t{colIndex_t(0), sortOrder_e::ASC},
         };
-        runTest(t, std::move(rowsAfter), std::move(sortPolicies));
 
-        rowsAfter = {
+        runTest(tPtr, std::move(rowsAfter), std::move(sortPolicies));
+
+        rows_t rowsAfter_1 = rows_t{
             {"bbb", 0, false},
             {"xx", 2, false},
             {"bbb", 1, true},
             {"aa", 3, true},
             {"aa", 4, true},
         };
-        sortPolicies = {
-            {2, true},
-            {1, true},
-        };
-        runTest(t, std::move(rowsAfter), std::move(sortPolicies));
 
-        rowsAfter = {
+        std::vector<sortPolicy_t> sortPolicies_1 = {
+            {colIndex_t(2), sortOrder_e::ASC},
+            {colIndex_t(1), sortOrder_e::ASC},
+        };
+        runTest(tPtr, std::move(rowsAfter_1), std::move(sortPolicies_1));
+
+        rows_t rowsAfter_2 = {
             {"aa", 4, true},
             {"aa", 3, true},
             {"xx", 2, false},
             {"bbb", 1, true},
             {"bbb", 0, false},
         };
-        sortPolicies = {
-            {1, false},
-            {2, true},
-        };
-        runTest(t, std::move(rowsAfter), std::move(sortPolicies));
+
+        std::vector<sortPolicy_t> sortPolicies_2 = {
+            {colIndex_t(1), sortOrder_e::DESC},
+            {colIndex_t(2), sortOrder_e::ASC}};
+        runTest(tPtr, std::move(rowsAfter_2), std::move(sortPolicies_2));
     }
 };

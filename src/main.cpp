@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "table/table.h"
+#include "include/table.h"
 
 using namespace table;
 

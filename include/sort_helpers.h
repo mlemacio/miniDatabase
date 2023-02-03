@@ -1,5 +1,5 @@
-#ifndef TABLE_SORT_HELPERS_H
-#define TABLE_SORT_HELPERS_H
+#ifndef INCLUDE_SORT_HELPERS_H
+#define INCLUDE_SORT_HELPERS_H
 
 #include <functional>
 
@@ -131,4 +131,4 @@ namespace table
     };
 }
 
-#endif // TABLE_SORT_HELPERS_H
+#endif // INCLUDE_SORT_HELPERS_H

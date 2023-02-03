@@ -1,5 +1,5 @@
-#ifndef TABLE_TABLE_H
-#define TABLE_TABLE_H
+#ifndef INCLUDE_TABLE_H
+#define INCLUDE_TABLE_H
 
 #include <assert.h>
 #include <functional>
@@ -28,7 +28,7 @@ namespace table
          *
          * @param tableDef Ordered container of types
          */
-        template <ContainerOf<const colType_e> C = std::vector<const colType_e>>
+        template <typename C = std::vector<colType_e>>
         table_t(C &&tableDef)
             : m_tableDef(std::move(tableDef)),
               m_compareFuncs(),
@@ -57,7 +57,7 @@ namespace table
          *
          * @param sortPolicies
          */
-        template <ContainerOf<const sortPolicy_t> C = std::vector<const sortPolicy_t>>
+        template <typename C = std::vector<sortPolicy_t>>
         void sort(const C &sortPolicies)
         {
             // The whole gimmick here is to have the STL sort for us with std::sort
@@ -159,11 +159,11 @@ namespace table
             return true;
         }
 
-        std::vector<const colType_e> m_tableDef;         // Represents the columns and their types
-        std::vector<const compareFunc_f> m_compareFuncs; // Parallel to m_tableDef, for each column, what compare func should it use
+        std::vector<colType_e> m_tableDef;         // Represents the columns and their types
+        std::vector<compareFunc_f> m_compareFuncs; // Parallel to m_tableDef, for each column, what compare func should it use
 
         rows_t m_rows; // Holds the rows of the table
     };
 }
 
-#endif // TABLE_TABLE_H
+#endif // INCLUDE_TABLE_H
