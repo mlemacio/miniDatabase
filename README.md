@@ -10,3 +10,6 @@ Things to look for:
 - General code organization (Ease of use, extensibility...)
 - Leverage of the STL (All of the sorting is based on letting std::sort do all the work)
 - Brevity / Cleanliness / Simplicity (This could very easy balloon up into something a lot more complicated)
+- In the example provided in main, different types of containers can be passed in and all have the same result
+
+Note: Some things were done because "they could be done" and to show off a little. This code is not necessarily the simplest and most beginniner friendly code possible
