@@ -1,10 +1,10 @@
 #include <iostream>
 
-#include "include/table.h"
-
 #include <deque>
 #include <list>
 #include <vector>
+
+#include "table/table.h"
 
 using namespace table;
 

@@ -8,7 +8,6 @@
 
 #include "table_helpers.h"
 #include "sort_helpers.h"
-#include "type.h"
 
 namespace table
 {

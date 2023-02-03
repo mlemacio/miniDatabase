@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <memory>
 
-#include "include/table.h"
+#include "table/table.h"
 
 namespace test
 {
