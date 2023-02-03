@@ -4,7 +4,6 @@
 #include <assert.h>
 #include <functional>
 #include <iterator>
-#include <ranges>
 
 #include "table_helpers.h"
 #include "sort_helpers.h"
