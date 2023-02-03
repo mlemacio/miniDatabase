@@ -50,7 +50,7 @@ namespace table
      * @return compareResult_e
      */
     template <ColumnType T>
-    static compareResult_e compareType(const colValue_t &lhs, const colValue_t &rhs)
+    static auto compareType(const colValue_t &lhs, const colValue_t &rhs) -> compareResult_e
     {
         const auto left = std::get<T>(lhs);
         const auto right = std::get<T>(rhs);
@@ -78,7 +78,7 @@ namespace table
      * @param ct Column type
      * @return compareFunc_f How to compare two values associated with the given column type
      */
-    static compareFunc_f getTypeSpecificComparisonFunc(const colType_e ct)
+    static auto getTypeSpecificComparisonFunc(const colType_e ct) -> compareFunc_f
     {
         switch (ct)
         {
@@ -107,7 +107,7 @@ namespace table
      */
     struct sortHelper_t
     {
-        bool operator()(const row_t &lhs, const row_t &rhs)
+        auto operator()(const row_t &lhs, const row_t &rhs) -> bool
         {
             for (const auto &f : sortPriorityFunctions)
             {

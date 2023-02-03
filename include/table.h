@@ -114,7 +114,7 @@ namespace table
          *
          * @return const std::vector<row_t>&
          */
-        const rows_t &getRows() const
+        auto getRows() const -> const rows_t &
         {
             return m_rows;
         }
@@ -127,7 +127,7 @@ namespace table
          *
          * @param row
          */
-        bool isRowValid(const row_t &row)
+        auto isRowValid(const row_t &row) -> bool
         {
             if (row.size() != m_tableDef.size())
             {
@@ -149,7 +149,7 @@ namespace table
         /**
          * @brief Checks a passed in policy is valid to sort on
          */
-        bool isSortPolicyValid(const sortPolicy_t &sp)
+        auto isSortPolicyValid(const sortPolicy_t &sp) -> bool
         {
             if (sp.colIndex.get() >= m_tableDef.size())
             {
