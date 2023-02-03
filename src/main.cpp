@@ -2,6 +2,10 @@
 
 #include "include/table.h"
 
+#include <deque>
+#include <list>
+#include <vector>
+
 using namespace table;
 
 int main()
@@ -24,17 +28,17 @@ int main()
 
     // Sort in various ways and print it
     std::cout << "Table after Sort Ordering: {{0, asc}}" << '\n';
-    t.sort({{colIndex_t(0), sortOrder_e::ASC}});
+    t.sort(std::vector<sortPolicy_t>{{colIndex_t(0), sortOrder_e::ASC}});
     t.print();
     std::cout << '\n';
 
     std::cout << "Table after Sort Ordering: {{2, asc}, {1, asc}}" << '\n';
-    t.sort({{colIndex_t(2), sortOrder_e::ASC}, {colIndex_t(1), sortOrder_e::ASC}});
+    t.sort(std::list<sortPolicy_t>{{colIndex_t(2), sortOrder_e::ASC}, {colIndex_t(1), sortOrder_e::ASC}});
     t.print();
     std::cout << '\n';
 
     std::cout << "Table after Sort Ordering: {{2, asc}, {1, desc}}" << '\n';
-    t.sort({{colIndex_t(2), sortOrder_e::ASC}, {colIndex_t(2), sortOrder_e::DESC}});
+    t.sort(std::deque<sortPolicy_t>{{colIndex_t(2), sortOrder_e::ASC}, {colIndex_t(2), sortOrder_e::DESC}});
     t.print();
     std::cout << '\n';
 
