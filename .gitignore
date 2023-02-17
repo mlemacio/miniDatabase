@@ -1,3 +1,4 @@
 *bazel-*
 *settings.json*
 .gitignore
+.vscode/c_cpp_properties.json
