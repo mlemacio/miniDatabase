@@ -98,6 +98,10 @@ namespace table
         {
             return compareFunc_f(compareType<bool>);
         }
+        case colType_e::COLOR:
+        {
+            return compareFunc_f(compareType<Color>);
+        }
         }
     }
 
