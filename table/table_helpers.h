@@ -5,6 +5,8 @@
 #include <variant>
 #include <vector>
 
+#include "generic/color.h"
+
 namespace table
 {
     /**
@@ -14,6 +16,9 @@ namespace table
     concept ColumnType = requires(T a, T b) {
                              // By convention, all you need to sort a container is this operation defined
                              a < b;
+
+                            // We also need to know when they're the same value
+                             a == b;
 
                              // Have some sort of way to print it (Soft requirement)
                              std::cout << a;
@@ -30,9 +35,10 @@ namespace table
         STRING = 1,
         BOOLEAN = 2,
         DOUBLE = 3,
+        COLOR = 4,
     };
 
-    using colValue_t = std::variant<int, std::string, bool, double>;
+    using colValue_t = std::variant<int, std::string, bool, double, Color>;
 
     // For simplicity, just assume a row is a vector of column values. This can get a lot more complex
     using row_t = std::vector<colValue_t>;
