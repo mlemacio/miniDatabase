@@ -26,7 +26,7 @@ namespace table
     };
 
     /**
-     * @brief Generate a weak ordering value
+     * @brief Generate a weak ordering value between two values of the same type T
      *
      * @tparam T    ONLY has < and == defined and does NOT have the spaceship operator
      * @return std::weak_ordering
