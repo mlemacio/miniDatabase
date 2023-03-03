@@ -3,6 +3,13 @@
 
 #include "table/table.h"
 
+// Curiously, GTEST isn't smart enough to use <=>
+auto operator==(const Color &l, const Color &r) -> bool
+{
+    std::weak_ordering cmp = l <=> r;
+    return cmp == std::weak_ordering::equivalent;
+}
+
 namespace test
 {
     using namespace table;
@@ -18,9 +25,9 @@ namespace test
         return t;
     }
 
-    void runTest(const auto &tPtr,
+    auto runTest(const auto &tPtr,
                  const auto &rowsAfter,
-                 auto &&sorts)
+                 auto &&sorts) -> void
     {
         tPtr->sort(std::move(sorts));
         auto rowsAfterSort = tPtr->getRows();

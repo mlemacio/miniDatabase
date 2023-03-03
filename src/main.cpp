@@ -16,11 +16,11 @@ int main()
     table_t t({colType_e::STRING, colType_e::INTEGER, colType_e::BOOLEAN, colType_e::COLOR});
 
     // Add rows to our table
-    t.appendRow({"aa", 3, true, Color::color_e::RED});
-    t.appendRow({"bbb", 1, true, Color::color_e::GREEN});
-    t.appendRow({"xx", 2, false, Color::color_e::BLUE});
-    t.appendRow({"aa", 4, true, Color::color_e::RED});
-    t.appendRow({"bbb", 0, false, Color::color_e::RED});
+    t.appendRow({"aa", 3, true, color_e::RED});
+    t.appendRow({"bbb", 1, true, color_e::GREEN});
+    t.appendRow({"xx", 2, false, color_e::BLUE});
+    t.appendRow({"aa", 4, true, color_e::RED});
+    t.appendRow({"bbb", 0, false, color_e::RED});
 
     std::cout << "Starting Table" << '\n';
     t.print();
