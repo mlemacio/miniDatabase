@@ -36,15 +36,10 @@ namespace table
             // Pre-define the comparison for each column since each column type is known
             m_compareFuncs.reserve(m_tableDef.size());
             for (const auto colType : m_tableDef)
-            {
                 m_compareFuncs.emplace_back(getTypeSpecificComparisonFunc(colType));
-            }
         }
 
-        /**
-         * @brief Add a new row to the current table
-         */
-        void appendRow(row_t &&row)
+        auto appendRow(row_t &&row) -> void
         {
             assert(isRowValid(row));
             m_rows.emplace_back(std::move(row));
@@ -53,21 +48,21 @@ namespace table
         /**
          * @brief Sorts the table based on the passed in policies
          *
+         *        The whole gimmick here is to have the STL sort for us with std::sort
+         *        And we just create the sorting operator
+         *
          * @param sortPolicies
          */
         template <typename C = std::vector<sortPolicy_t>>
-        void sort(const C &sortPolicies)
+        auto sort(const C &sortPolicies) -> void
         {
-            // The whole gimmick here is to have the STL sort for us with std::sort
-            // And we just create the sorting operator
-            sortHelper_t sh;
-            sh.sortPriorityFunctions.reserve(sortPolicies.size());
+            std::vector<policyFunc_f> sortPriorityFunctions;
+            sortPriorityFunctions.reserve(sortPolicies.size());
 
             // For every policy, build a comparison function between two rows for this sort policy
             for (const auto &policy : sortPolicies)
             {
                 assert(isSortPolicyValid(policy));
-
                 auto compareFunc = [this, &policy](const row_t &lhs, const row_t &rhs)
                 {
                     auto &leftVal = lhs[policy.colIndex.get()];
@@ -78,83 +73,49 @@ namespace table
                     auto compareRes = valCompareFunc.get()(leftVal, rightVal);
 
                     if (policy.sortOrder == sortOrder_e::DESC)
-                    {
-                        // This trick only works when you set the values in the enum
-                        compareRes = static_cast<compareResult_e>(-1 * static_cast<int>(compareRes));
-                    }
+                        return flipOrdering(compareRes);
 
                     return compareRes;
                 };
 
-                sh.sortPriorityFunctions.emplace_back(std::move(compareFunc));
+                sortPriorityFunctions.emplace_back(std::move(compareFunc));
             }
 
             // Once we have all our policy functions built, use the STL sort
-            std::sort(m_rows.begin(), m_rows.end(), sh);
+            std::sort(m_rows.begin(), m_rows.end(), sortHelper_t(std::move(sortPriorityFunctions)));
         }
 
-        /**
-         * @brief Prints out the table to cout
-         */
-        void print() const
+        auto print() const -> void
         {
             std::cout << "-------------------\n";
             for (const auto &row : m_rows)
-            {
                 printRow(row);
-            }
         }
 
-        /**
-         * @brief Get the underlying rowss
-         *
-         *  NOTE: This can result in a dangling reference
-         *
-         * @return const std::vector<row_t>&
-         */
-        auto getRows() const -> const rows_t &
-        {
-            return m_rows;
-        }
+        auto getRows() const -> const rows_t & { return m_rows; }
 
     private:
-        /**
-         * @brief Makes sure a passed in row matches the table definiion
-         *
-         *  NOTE: This can get a lot more nuanced depending on internal layout, we kind of just cheat a little
-         *
-         * @param row
-         */
         auto isRowValid(const row_t &row) -> bool
         {
+            // Correct # of elements
             if (row.size() != m_tableDef.size())
-            {
                 return false;
-            }
 
+            // Each type matches respective column type
             for (auto i = 0; i < m_tableDef.size(); ++i)
             {
                 // A little bit of a hack based on setting the enums
                 if (row[i].index() != static_cast<int>(m_tableDef[i]))
-                {
                     return false;
-                }
             }
 
             return true;
         }
 
-        /**
-         * @brief Checks a passed in policy is valid to sort on
-         */
         auto isSortPolicyValid(const sortPolicy_t &sp) -> bool
         {
-            if (sp.colIndex.get() >= m_tableDef.size())
-            {
-                return false;
-            }
-
-            return true;
+            // Valid column index
+            return sp.colIndex.get() < m_tableDef.size();
         }
 
         std::vector<colType_e> m_tableDef;         // Represents the columns and their types

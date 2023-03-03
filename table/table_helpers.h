@@ -9,25 +9,41 @@
 
 namespace table
 {
+    template <typename T>
+    concept has_weak_spaceship_op = requires(T a, T b) {
+                                        {
+                                            a <=> b
+                                            } -> std::convertible_to<std::weak_ordering>;
+                                    };
+
+    template <typename T>
+    concept has_less_equal_op = requires(T a, T b) {
+                                    {
+                                        a < b
+                                        } -> std::same_as<bool>;
+                                    {
+                                        a == b
+                                        } -> std::same_as<bool>;
+                                };
+
+    template <typename T>
+    concept is_printable = requires(T a) {
+                               std::cout << a;
+                           };
+
+    template <typename T>
+    concept is_weakly_orderable = has_weak_spaceship_op<T> || has_less_equal_op<T>;
+
     /**
      * @brief All column types have to meet these requirements
      */
     template <typename T>
-    concept ColumnType = requires(T a, T b) {
-                             // By convention, all you need to sort a container is this operation defined
-                             a < b;
-
-                            // We also need to know when they're the same value
-                             a == b;
-
-                             // Have some sort of way to print it (Soft requirement)
-                             std::cout << a;
-                         };
+    concept ColumnType = is_weakly_orderable<T> && is_printable<T>;
 
     /**
      * @brief Define all the available column types available to use
      *
-     *  NOTE: Should match up 1:1 with types within colValue_t variant (Helps with checking validity)
+     *  NOTE: Should match up 1:1 with types within colValue_t variant
      */
     enum class colType_e : uint8_t
     {
@@ -39,25 +55,22 @@ namespace table
     };
 
     using colValue_t = std::variant<int, std::string, bool, double, Color>;
-
-    // For simplicity, just assume a row is a vector of column values. This can get a lot more complex
     using row_t = std::vector<colValue_t>;
     using rows_t = std::vector<row_t>;
 
     /**
      * @brief Prints out every value in a row to std::cout
      */
-    static inline void printRow(const row_t &row)
+    static inline auto printRow(const row_t &row) -> void
     {
-        auto print = [](const auto &val)
+        static auto print = [](const auto &val)
         {
             std::cout << val << " ";
         };
 
         for (const auto &val : row)
-        {
             std::visit(print, val);
-        }
+
         std::cout << '\n';
     }
 }
