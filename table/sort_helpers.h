@@ -116,13 +116,18 @@ namespace table
         sortHelper_t(std::vector<policyFunc_f> &&funcs)
             : sortPriorityFunctions(std::move(funcs)) {}
 
+        /**
+         * @brief This is what will end up getting called when std::sort has to decide which
+         *        row to place first
+         */
         auto operator()(const row_t &lhs, const row_t &rhs) -> bool
         {
+            // Go through as many functions as we have before we find a non-equivalent weak ordering
             for (const auto &compareFunc : sortPriorityFunctions)
             {
                 auto compareResult = compareFunc.get()(lhs, rhs);
 
-                // Need to use next tie breaker
+                // Need to use next policy to break the tie
                 if (compareResult == std::weak_ordering::equivalent)
                     continue;
 
