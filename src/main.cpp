@@ -37,11 +37,6 @@ int main()
     t.print();
     std::cout << '\n';
 
-    std::cout << "Table after Sort Ordering: {{2, asc}, {1, desc}}" << '\n';
-    t.sort(std::deque<sortPolicy_t>{{colIndex_t(2), sortOrder_e::ASC}, {colIndex_t(2), sortOrder_e::DESC}});
-    t.print();
-    std::cout << '\n';
-
     std::cout << "Table after Sort Ordering: {{1, desc}, {2, asc}}" << '\n';
     t.sort({{colIndex_t(2), sortOrder_e::DESC}, {colIndex_t(2), sortOrder_e::ASC}});
     t.print();
