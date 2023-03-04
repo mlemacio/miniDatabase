@@ -8,7 +8,7 @@ A basic representation of a table in a database with that can represent a variab
 Things to look for:
 - Modern C++ Usage 
     - Concepts, Named Types, Templates, Move Semantics, Weak Ordering
-    - Fifferent types of containers can be passed in and all have the same result
+    - Different types of containers can be passed in and all have the same result
 - General code organization (Ease of use, extensibility...)
     - How easy it is to add a new type (Look at generic/color.h)
 - Leverage of the STL (All of the sorting is based on letting std::sort do all the work)
