@@ -38,12 +38,12 @@ int main()
     std::cout << '\n';
 
     std::cout << "Table after Sort Ordering: {{1, desc}, {2, asc}}" << '\n';
-    t.sort({{colIndex_t(1), sortOrder_e::DESC}, {colIndex_t(2), sortOrder_e::ASC}});
+    t.sort(std::deque<sortPolicy_t>{{colIndex_t(1), sortOrder_e::DESC}, {colIndex_t(2), sortOrder_e::ASC}});
     t.print();
     std::cout << '\n';
 
     std::cout << "Table after Sort Ordering: {{3, desc}}" << '\n';
-    t.sort({{colIndex_t(3), sortOrder_e::DESC}});
+    t.sort(std::array<sortPolicy_t, 1>{{{colIndex_t(3), sortOrder_e::DESC}}});
     t.print();
     std::cout << '\n';
     return 0;
