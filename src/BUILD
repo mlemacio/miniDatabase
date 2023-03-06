@@ -5,5 +5,6 @@ cc_binary(
     srcs = ["main.cpp"],
     deps = [
       "//table:table",
+      "//cli:cli",
     ],
 )

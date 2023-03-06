@@ -4,6 +4,7 @@
 #include <list>
 #include <vector>
 
+#include "cli/commandLineInterface.h"
 #include "table/table.h"
 
 using namespace table;
@@ -11,6 +12,8 @@ using namespace table;
 int main()
 {
     std::cout << std::boolalpha;
+    commandLineInterface_t cli;
+    cli.run();
 
     // Define our table
     table_t t({colType_e::STRING, colType_e::INTEGER, colType_e::BOOLEAN, colType_e::COLOR});
