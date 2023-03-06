@@ -3,4 +3,5 @@ build --copt -fmodules
 build --copt -fno-implicit-modules
 build --copt -fbuiltin-module-map
 build --copt -stdlib=libc++
+build --copt -Werror=switch
 build --linkopt -stdlib=libc++

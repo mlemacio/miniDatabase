@@ -51,7 +51,7 @@ namespace table
      * @return std::weak_ordering between values
      */
     template <ColumnType T>
-    static auto compareType(const colValue_t &lhs, const colValue_t &rhs) -> std::weak_ordering
+    static inline auto compareType(const colValue_t &lhs, const colValue_t &rhs) -> std::weak_ordering
     {
         const auto left = std::get<T>(lhs);
         const auto right = std::get<T>(rhs);
@@ -76,7 +76,7 @@ namespace table
      * @param ct Column type
      * @return compareFunc_f How to compare two values associated with the given column type
      */
-    static auto getTypeSpecificComparisonFunc(const colType_e ct) -> compareFunc_f
+    static inline auto getTypeSpecificComparisonFunc(const colType_e ct) -> compareFunc_f
     {
         switch (ct)
         {
@@ -96,7 +96,7 @@ namespace table
     /**
      * @brief In the case that this sort policy is DESC, flip the sign of the ordering
      */
-    static auto flipOrdering(std::weak_ordering wo) -> std::weak_ordering
+    static inline auto flipOrdering(std::weak_ordering wo) -> std::weak_ordering
     {
         if (wo == std::weak_ordering::less)
             return std::weak_ordering::greater;

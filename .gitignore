@@ -2,3 +2,6 @@
 *settings.json*
 .gitignore
 .vscode/c_cpp_properties.json
+cli/generate/__pycache__/generate_files.cpython-38.pyc
+cli/generate/__pycache__/constants.cpython-38.pyc
+*cli/actions*
