@@ -11,6 +11,7 @@ Things to look for:
     - Different types of containers can be passed in and all have the same result
 - General code organization (Ease of use, extensibility...)
     - How easy it is to add a new type (Look at generic/color.h)
+    - Auto generation of database actions in the CLI with python (cli/generate/main.py)
 - Leverage of the STL (All of the sorting is based on letting std::sort do all the work)
 - Brevity / Cleanliness / Simplicity (This could very easy balloon up into something a lot more complicated)
 
