@@ -11,25 +11,25 @@ namespace table
 {
     template <typename T>
     concept has_weak_spaceship_op = requires(T a, T b) {
-                                        {
-                                            a <=> b
-                                            } -> std::convertible_to<std::weak_ordering>;
-                                    };
+        {
+            a <=> b
+        } -> std::convertible_to<std::weak_ordering>;
+    };
 
     template <typename T>
     concept has_less_equal_op = requires(T a, T b) {
-                                    {
-                                        a < b
-                                        } -> std::same_as<bool>;
-                                    {
-                                        a == b
-                                        } -> std::same_as<bool>;
-                                };
+        {
+            a < b
+        } -> std::same_as<bool>;
+        {
+            a == b
+        } -> std::same_as<bool>;
+    };
 
     template <typename T>
     concept is_printable = requires(T a) {
-                               std::cout << a;
-                           };
+        std::cout << a;
+    };
 
     template <typename T>
     concept is_weakly_orderable = has_weak_spaceship_op<T> || has_less_equal_op<T>;
@@ -71,6 +71,38 @@ namespace table
         for (const auto &val : row)
             std::visit(print, val);
 
+        std::cout << '\n';
+    }
+
+    static inline auto printRows(const rows_t &rows) -> void
+    {
+        for (const auto &row : rows)
+            printRow(row);
+    }
+
+    static inline auto colTypeToString(colType_e ct) noexcept -> std::string_view
+    {
+        switch (ct)
+        {
+        case colType_e::INTEGER:
+            return "INTEGER";
+        case colType_e::STRING:
+            return "STRING";
+        case colType_e::BOOLEAN:
+            return "BOOLEAN";
+        case colType_e::DOUBLE:
+            return "DOUBLE";
+        case colType_e::COLOR:
+            return "COLOR";
+        }
+    }
+
+    static inline auto printTableDef(const std::vector<colType_e> &tableDef)
+    {
+        for (const auto &colType : tableDef)
+        {
+            std::cout << colTypeToString(colType) << " ";
+        }
         std::cout << '\n';
     }
 }

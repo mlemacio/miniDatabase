@@ -27,8 +27,9 @@ namespace table
          * @param tableDef Ordered container of types
          */
         template <typename C = std::vector<colType_e>>
+            requires std::is_constructible_v<std::vector<colType_e>, C>
         table_t(C &&tableDef)
-            : m_tableDef(std::move(tableDef)),
+            : m_tableDef(std::forward<C>(tableDef)),
               m_compareFuncs(),
               m_rows()
         {
@@ -85,17 +86,11 @@ namespace table
             std::sort(m_rows.begin(), m_rows.end(), sortHelper_t(std::move(sortPriorityFunctions)));
         }
 
-        auto print() const -> void
-        {
-            std::cout << "-------------------\n";
-            for (const auto &row : m_rows)
-                printRow(row);
-        }
-
-        auto getRows() const -> const rows_t & { return m_rows; }
+        auto getRows() noexcept const -> const rows_t & { return m_rows; }
+        auto getTableDef() noexcept const -> const std::vector<colType_e> & { return m_tableDef; }
 
     private:
-        auto isRowValid(const row_t &row) -> bool
+        inline auto isRowValid(const row_t &row) noexcept -> bool
         {
             // Correct # of elements
             if (row.size() != m_tableDef.size())
@@ -112,7 +107,7 @@ namespace table
             return true;
         }
 
-        auto isSortPolicyValid(const sortPolicy_t &sp) -> bool
+        inline auto isSortPolicyValid(const sortPolicy_t &sp) noexcept -> bool
         {
             // Valid column index
             return sp.colIndex.get() < m_tableDef.size();
